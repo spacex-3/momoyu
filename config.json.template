@@ -1,2 +1,5 @@
 {
-  "url_sum": {
+    "api_base": "https://api.***.ai",
+    "api_key": "sk-***",
+    "rss": "https://***",
+}
