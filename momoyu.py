@@ -39,7 +39,8 @@ class momoyu(Plugin):
         if self.content == "新闻":
             logger.info(f"[{__class__.__name__}] 收到消息: {self.content}")
             reply = Reply()
-            
+            reply.content = ""
+
             # 获取RSS内容
             xml_content = self.get_rss_content(self.rss)
             if not xml_content:
@@ -141,9 +142,11 @@ class momoyu(Plugin):
     async def process_categories(self, reply, categories, e_context):
         """为每个类别的标题添加emoji"""
         async with aiohttp.ClientSession() as session:
+            result = ""
             for category, titles in categories.items():
                 if titles:
                     processed_titles = await self.process_titles(titles, session)
-                    reply.content += f"\n=== {category} ===\n" + "\n".join(processed_titles)
+                    result += f"\n\n=== {category} ===\n" + "\n".join(processed_titles)
+                    reply = Reply(ReplyType.TEXT, f"{result}")
             e_context["reply"] = reply
             e_context.action = EventAction.BREAK_PASS
